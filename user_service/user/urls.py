@@ -15,9 +15,9 @@ urlpatterns = [
 
     path('api/me/', get_user_data),
     path('internal/users/<uuid:user_id>/', internal_user_detail),
-    
+
     path('api/profile/me/', my_profile),
-    path('profile/me/update/', update_profile, name='update-profile'),
-    path('profile/other/<uuid:profile_id>/', profile_detail, name='profile-detail'),
-    path('profile/all/', list_profiles, name='list-profiles'),
+    path('api/profile/me/update/', update_profile, name='update-profile'),
+    path('api/profile/other/<uuid:profile_id>/', profile_detail, name='profile-detail'),
+    path('api/profile/all/', list_profiles, name='list-profiles'),
 ]
