@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from user.userApp.serializers import ProfileUpdateSerializer
+from user.userApp.models import Profile
 
 
 User = get_user_model()
@@ -56,6 +57,24 @@ def update_profile(request):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=400)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def profile_detail(request, profile_id):
+    try:
+        profile = Profile.objects.select_related('user').get(id=profile_id)
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
+    except Profile.DoesNotExist:
+        return Response({"error": "Profile not found"}, status=404)
+    
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def list_profiles(request):
+
+    profiles = Profile.objects.select_related('user').all()
+    serializer = ProfileSerializer(profiles, many=True)
+    return Response(serializer.data)
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer

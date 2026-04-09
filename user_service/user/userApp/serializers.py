@@ -54,4 +54,4 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['nickname', 'age', 'gender', 'description', 'avatar', 'frame', 'background']
+        fields = ['nickname', 'realName', 'age', 'gender', 'description', 'avatar', 'frame', 'background', 'countrie', 'level']

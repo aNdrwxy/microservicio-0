@@ -48,10 +48,14 @@ class Profile(models.Model):
         related_name="profile"
     )
 
-    nickname = models.CharField(max_length=50, blank=True)
+    nickname = models.CharField(max_length=50, null=True, blank=True)
+    realName = models.CharField(max_length=50, null=True, blank=True)
+    countrie = models.CharField(max_length=50, null=True, blank=True)
+    level = models.PositiveIntegerField(null=True, blank=True, default=0)
     age = models.PositiveIntegerField(null=True, blank=True)
     gender = models.CharField(max_length=10, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
+    userState = models.CharField(max_length=50, null=False, blank=False)
 
     avatar = models.URLField(default="https://i.pinimg.com/236x/d4/74/1c/d4741cb779ddec6509ca1ae0cb137a7d.jpg")
     frame = models.URLField(default="https://cdn.fastly.steamstatic.com/steamcommunity/public/images/items/860950/6e1b5f5977036a189465f5455f2c54722c12883d.png")
@@ -60,6 +64,8 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         if not self.nickname:
             self.nickname = self.user.username
+        if not self.userState:
+            self.userState = self.user.status
         super().save(*args, **kwargs)
 
     def __str__(self):
