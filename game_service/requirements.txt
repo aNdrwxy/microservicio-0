@@ -2,3 +2,4 @@ djangorestframework
 djangorestframework-simplejwt
 mysqlclient
 django-filter
+django-cors-headers
