@@ -4,3 +4,4 @@ django-filter
 mysqlclient
 requests
 pika
+django-cors-headers

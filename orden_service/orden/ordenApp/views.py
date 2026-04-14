@@ -24,8 +24,39 @@ class CartViewSet(viewsets.ViewSet):
     def list(self, request):
         user_id = request.user.token.payload.get("user_id")
         cart = self._get_or_create_cart(user_id)
-        serializer = CartSerializer(cart)
-        return Response(serializer.data)
+
+        items = cart.items.all()
+        enriched_items = []
+
+        for item in items:
+            game_data = get_game_details(str(item.game_id))
+
+            if game_data:
+                enriched_items.append({
+                    "id": str(item.id),
+                    "game_id": str(item.game_id),
+                    "title": game_data.get("title"),
+                    "price": game_data.get("price"),
+                    "cover_image": game_data.get("cover_image"),
+                    "added_at": item.added_at
+                })
+            else:
+                enriched_items.append({
+                    "id": str(item.id),
+                    "game_id": str(item.game_id),
+                    "title": "Unknown Game",
+                    "price": "0.00",
+                    "cover_image": None,
+                    "added_at": item.added_at
+                })
+
+        return Response({
+            "id": str(cart.id),
+            "user_id": str(cart.user_id),
+            "status": cart.status,
+            "items": enriched_items,
+            "created_at": cart.created_at
+        })
 
     @action(detail=False, methods=['post'])
     def add_item(self, request):

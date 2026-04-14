@@ -52,3 +52,15 @@ def create_paypal_order(amount):
     response.raise_for_status()
 
     return response.json()
+
+def capture_paypal_order(paypal_order_id):
+    """Captura el pago después de que el usuario aprueba en PayPal."""
+    access_token = get_access_token()
+    url = f"{BASE_URL}/v2/checkout/orders/{paypal_order_id}/capture"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+    response = requests.post(url, headers=headers)
+    response.raise_for_status()
+    return response
